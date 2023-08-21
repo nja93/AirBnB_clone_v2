@@ -118,25 +118,27 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-	tokens = args.split() # 0 - BaseModel, 1 = param = name="Lorna"
-	class_name = tokens[0]
-	      #  create BaseModel name="Lorna\'s"
-        elif class_name not in HBNBCommand.classes:
+        tokens = args.split()
+        class_name = tokens[0]
+        # create BaseModel name="Lorna\'s"
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-	for param in tokens[1:]:
-	    key_value = param.split('=')
-	    if len(key_value) == 2:
-	         key = key_value[0]
-		 value = key_value[1]
-	    if value.startswith('"') and value.endwith('"'):
-		    value = value.replace('\\"', '"')
-		    value = value.replace('_', ' ')
-	    elif '.' in value:
-	     	   value = float(value)
-	    else:
-		    value = int(value)
-	new_instance = HBNBCommand.classes[args]()
+        for param in tokens[1:]:
+            key_value = param.split('=')
+            if len(key_value) == 2:
+                key = key_value[0]
+                value = key_value[1]
+                if value.startswith('"') and value.endwith('"'):
+                    value = value.replace('\\"', '"')
+                    value = value.replace('_', ' ')
+                elif '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+                param_dict = {}
+                param[key] = value
+        new_instance = HBNBCommand.classes[args]()
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -334,6 +336,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
