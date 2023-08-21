@@ -115,15 +115,16 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+        tokens = args.split()
+        class_name = tokens[0]
         if not args:
             print("** class name missing **")
             return
-        tokens = args.split()
-        class_name = tokens[0]
-        # create BaseModel name="Lorna\'s"
-        if class_name not in HBNBCommand.classes:
+        elif class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
+        new_instance = HBNBCommand.classes[class_name]()
+        print(class_name)
         for param in tokens[1:]:
             key_value = param.split('=')
             if len(key_value) == 2:
@@ -136,12 +137,16 @@ class HBNBCommand(cmd.Cmd):
                     value = float(value)
                 else:
                     value = int(value)
-                param_dict = {}
-                param_dict[key] = value
-        new_instance = HBNBCommand.classes[args]()
+                if value is None:
+                    continue
+                else:
+                    setattr(new_instance, key, value)
+                #  param_dict = {}
+                #  param_dict[key] = value
+        #  new_instance = HBNBCommand.classes[args]()
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
