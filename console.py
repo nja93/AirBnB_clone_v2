@@ -129,7 +129,7 @@ class HBNBCommand(cmd.Cmd):
             if len(key_value) == 2:
                 key = key_value[0]
                 value = key_value[1]
-                if value.startswith('"') and value.endwith('"'):
+                if value.startswith('"') and value.endswith('"'):
                     value = value.replace('\\"', '"')
                     value = value.replace('_', ' ')
                 elif '.' in value:
@@ -137,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     value = int(value)
                 param_dict = {}
-                param[key] = value
+                param_dict[key] = value
         new_instance = HBNBCommand.classes[args]()
         storage.save()
         print(new_instance.id)
@@ -204,7 +204,9 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            all_items = storage.all()
+            del all_items[key]
+
             storage.save()
         except KeyError:
             print("** no instance found **")
