@@ -124,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[class_name]()
-        print(class_name)
+        #  print(class_name)
         for param in tokens[1:]:
             key_value = param.split('=')
             if len(key_value) == 2:
