@@ -14,8 +14,9 @@ class BaseModel:
     id = Column(String(60), nullable=False, primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
     def __init__(self, *args, **kwargs):
-        """Instatntiates a new model"""
+        """Instatiates a new model"""
         if not kwargs:
             #  from models import storage
             self.id = str(uuid.uuid4())
@@ -30,6 +31,7 @@ class BaseModel:
                     setattr(self, key, datetime.fromisoformat(value))
                 else:
                     setattr(self, key, value)
+
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
@@ -58,4 +60,3 @@ class BaseModel:
         '''to delete the current instance from the storage'''
         from models import storage
         storage.delete()
-
