@@ -42,12 +42,12 @@ class DBStorage:
         my_classes = [User, State, City, Amenity, Place, Review]
         dictionary = {}
         if cls is not None:
-            for value in self.__session.query(cls):
+            for value in self.__session.query(cls).all():
                 key = '{}.{}'.format(value.__class__.__name__, value.id)
                 dictionary[key] = value
         else:
             for clas in my_classes:
-                for value in self.__session.query(clas):
+                for value in self.__session.query(clas).all():
                     key = '{}.{}'.format(value.__class__.__name__, value.id)
                     dictionary[key] = value
         return dictionary

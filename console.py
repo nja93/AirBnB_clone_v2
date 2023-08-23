@@ -222,7 +222,7 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, args):
-        """ Shows all objects, or all objects of a class"""
+        '''Shows all objects, or all objects of a class'''
         print_list = []
 
         if args:
@@ -230,15 +230,18 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
+            '''
             class_objects = storage.all(HBNBCommand.classes[args])
             for obj_id, obj in class_objects.items():
-                print_list.append(str(obj))
+            print_list.append(str(obj))
+            '''
+            for k, v in storage.all(HBNBCommand.classes[args]).items():
+                print_list.append(str(v))
         else:
-            all_objects = storage.all()
-            for obj_id, obj in all_objects.items():
-                print_list.append(str(obj))
-
+              for k, v in storage.all().items():
+                print_list.append(str(v))
         print(print_list)
+    
 
     def help_all(self):
         """ Help information for the all command """
