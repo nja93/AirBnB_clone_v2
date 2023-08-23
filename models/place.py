@@ -22,31 +22,3 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     amenity_ids = []
-
-    
-    if environ.get("HBNB_TYPE_STORAGE") == "db":
-        reviews= relationship('Review', cascade='all, delete, delete-orphan', backref='place')
-        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False, back_populates='place_amenities')
-
-'''if not set to db, defines property rev'''
-    else:
-    @property
-    def reviews(self):
-        from models import storage
-        rev_instances = storage.all("Review").values()
-        return [review for review in rev_instances
-
-    if review.place_id == self.id]
-    
-        @property
-        def amenities(self):
-            from models import storage
-            amenity_instances = storage.all("Amenity").values()
-            return [amenity for amenity in amenity_instances
-                    if amenity.id in self.amenity_ids]
-
-        @amenities.setter
-        def amenities(self, obj):
-            from models.amenity import Amenity
-            if isinstance(obj, Amenity):
-                self.amenity_ids.append(obj)
