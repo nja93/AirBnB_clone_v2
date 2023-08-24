@@ -6,6 +6,7 @@ from sqlalchemy import Column, String, Float, Integer, Table
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 import models
+from os import getenv
 
 
 class Place(BaseModel, Base):
@@ -25,7 +26,7 @@ class Place(BaseModel, Base):
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship(
-            'Review' cascade='all, delete, delete-orphan', backref='place')
+            'Review', cascade='all, delete, delete-orphan', backref='place')
     else:
         @property
         def reviews(self):
@@ -36,4 +37,3 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     matching_reviews.append(review)
             return matching_reviews
-
