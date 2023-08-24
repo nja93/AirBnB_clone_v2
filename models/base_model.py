@@ -34,8 +34,10 @@ class BaseModel:
 
     def __str__(self):
         """Returns a string representation of the instance"""
-        return '[{}] ({}) {}'.format(
-            self.__class__.__name__, self.id, self.__dict__)
+        cls = self.__dict__.copy()
+        cls.pop("_sa_instance_state", None)
+        print(cls)
+        return '[{}] ({}) {}'.format(type(self).__name__, self.id, cls)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
