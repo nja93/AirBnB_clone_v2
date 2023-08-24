@@ -35,6 +35,9 @@ class Place(BaseModel, Base):
     if getenv("HBNB_TYPE_STORAGE") == "db":
         reviews = relationship(
             'Review', cascade='all, delete, delete-orphan', backref='place')
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates='place_amenities')
     else:
         @property
         def reviews(self):
@@ -45,7 +48,7 @@ class Place(BaseModel, Base):
                 if review.place_id == self.id:
                     matching_reviews.append(review)
             return matching_reviews
-        
+
         @property
         def amenities(self):
             """
@@ -59,7 +62,7 @@ class Place(BaseModel, Base):
                 if amenity.id in self.amenity_ids:
                     matching_amenities.append(amenity)
             return matching_amenities
-        
+
         @amenities.setter
         def amenities(self, obj):
             """Setter attribute amenities that handles append method
