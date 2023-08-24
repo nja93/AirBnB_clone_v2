@@ -113,40 +113,66 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    # def do_create(self, args):
+    #     """ Create an object of any class"""
+    #     arg = args.split()
+    #     if not args:
+    #         print("** class name missing **")
+    #         return
+    #     elif arg[0] not in HBNBCommand.classes:
+    #         print("** class doesn't exist **")
+    #         return
+
+    #     new_instance = eval(arg[0])()
+    #     print(arg[0])
+    #     arg.pop(0)
+    #     for item in arg:
+    #         item = item.split('=')
+    #         if len(item) != 2:
+    #             continue
+    #         key = item[0]
+    #         value = item[1]
+    #         value = self.check_value_type(value)
+    #         if value is None:
+    #             continue
+    #         else:
+    #             setattr(new_instance, key, value)
+    #     storage.new(new_instance)
+    #     storage.save()
+    #     print(new_instance.id)
+
     def do_create(self, args):
-        """ Create an object of any class"""
-        tokens = args.split()
-        class_name = tokens[0]
-        if not args:
-            print("** class name missing **")
-            return
-        elif class_name not in HBNBCommand.classes:
+        """ Create an object of any class with fed key/value parameters"""
+        try:
+            if not args:
+                raise SyntaxError()
+            argsList = args.split(" ")
+            className = argsList[0]
+
+            kwargs = {}
+            for i in range(1, len(argsList)):
+                key, value = tuple(argsList[i].split("="))
+                if value[0] == '"':
+                    value = value.strip('"').replace("_", " ")
+                else:
+                    try:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
+                        continue
+                kwargs[key] = value
+
+            if kwargs == {}:
+                newObject = eval(className)()
+            else:
+                newObject = eval(className)(**kwargs)
+                storage.new(newObject)
+            print(newObject.id)
+            newObject.save()
+
+        except NameError:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[class_name]()
-        #  print(class_name)
-        for param in tokens[1:]:
-            key_value = param.split('=')
-            if len(key_value) == 2:
-                key = key_value[0]
-                value = key_value[1]
-                if value.startswith('"') and value.endswith('"'):
-                    value = value.replace('\\"', '"')
-                    value = value.replace('_', ' ')
-                elif '.' in value:
-                    value = float(value)
-                else:
-                    value = int(value)
-                if value is None:
-                    continue
-                else:
-                    setattr(new_instance, key, value)
-                #  param_dict = {}
-                #  param_dict[key] = value
-        #  new_instance = HBNBCommand.classes[args]()
-        storage.new(new_instance)
-        storage.save()
-        print(new_instance.id)
+        except SyntaxError:
+            print("** class name missing **")
 
     def help_create(self):
         """ Help information for the create method """
@@ -222,7 +248,7 @@ class HBNBCommand(cmd.Cmd):
         print("[Usage]: destroy <className> <objectId>\n")
 
     def do_all(self, args):
-        '''Shows all objects, or all objects of a class'''
+        """ Shows all objects, or all objects of a class"""
         print_list = []
 
         if args:
@@ -230,16 +256,12 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            '''
-            class_objects = storage.all(HBNBCommand.classes[args])
-            for obj_id, obj in class_objects.items():
-            print_list.append(str(obj))
-            '''
             for k, v in storage.all(HBNBCommand.classes[args]).items():
-                print_list.append(str(v))
+                print_list.append(v.__str__())
         else:
             for k, v in storage.all().items():
-                print_list.append(str(v))
+                print_list.append(v.__str__())
+
         print(print_list)
 
     def help_all(self):
