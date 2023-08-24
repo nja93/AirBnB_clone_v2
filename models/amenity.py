@@ -10,6 +10,6 @@ from sqlalchemy import Column, Integer, String
 class Amenity(BaseModel, Base):
     '''class amenity'''
     __tablename__ = 'amenities'
-    name =  Column(String(128), nullable=False)
+    name = Column(String(128), nullable=False)
     place_amenities = relationship('Place', secondary='place_amenity')
 
