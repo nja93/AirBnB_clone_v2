@@ -2,7 +2,7 @@
 '''change your storage engine and use SQLAlchemy'''
 
 
-from os import environ
+from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
@@ -17,18 +17,18 @@ import models
 """This module defines a class to manage sqlachemy for hbnb clone"""
 
 
-class DBStorage:
+class DBStorage():
     '''Database storage'''
     __engine = None
     __session = None
 
     def __init__(self):
         '''Getting attributes for the create engine Url'''
-        user = environ.get('HBNB_MYSQL_USER')
-        pas = environ.get('HBNB_MYSQL_PWD')
-        host = environ.get('HBNB_MYSQL_HOST', 'localhost')
-        db = environ.get('HBNB_MYSQL_DB')
-        env = environ.get('HBNB_ENV')
+        user = getenv('HBNB_MYSQL_USER')
+        pas = getenv('HBNB_MYSQL_PWD')
+        host = getenv('HBNB_MYSQL_HOST', 'localhost')
+        db = getenv('HBNB_MYSQL_DB')
+        env = getenv('HBNB_ENV')
         self.__engine = create_engine(
             'mysql+mysqldb://{}:{}@{}/{}'.format(
                 user, pas, host, db), pool_pre_ping=True)
