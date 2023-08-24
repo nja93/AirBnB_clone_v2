@@ -131,15 +131,14 @@ class HBNBCommand(cmd.Cmd):
                 key = key_value[0]
                 value = key_value[1]
                 if value.startswith('"') and value.endswith('"'):
+                    value = value[1:-1]  # Remove surrounding quotes
                     value = value.replace('\\"', '"')
                     value = value.replace('_', ' ')
                 elif '.' in value:
                     value = float(value)
                 else:
                     value = int(value)
-                if value is None:
-                    continue
-                else:
+                if value is not None:
                     setattr(new_instance, key, value)
                 #  param_dict = {}
                 #  param_dict[key] = value
