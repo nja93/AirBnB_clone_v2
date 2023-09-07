@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Install Nginx if it's not already installed
 sudo apt-get update
 sudo apt-get install -y nginx
@@ -8,8 +7,8 @@ sudo apt-get install -y nginx
 sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 
-# Create a fake HTML file for testing
-echo "<html><head></head><body>Holberton SchoolE!</body></html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+# Create a fake HTML file for testing 
+echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html > /dev/null
 
 # Create or recreate the symbolic link
 sudo rm -f /data/web_static/current
@@ -22,7 +21,7 @@ sudo chown -R ubuntu:ubuntu /data/
 nginx_config="/etc/nginx/sites-available/default"
 nginx_alias="location /hbnb_static/ { alias /data/web_static/current/; }"
 if ! grep -q "$nginx_alias" "$nginx_config"; then
-    sudo sed -i "/server_name _;/a $nginx_alias" "$nginx_config"
+    sudo sed -i "/server_name _;/a \ \ \ \ $nginx_alias" "$nginx_config"
 fi
 
 # Restart Nginx to apply changes
