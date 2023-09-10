@@ -1,4 +1,4 @@
-Thi block installs Nginx
+# Install Nginx
 package { 'nginx':
   ensure => 'installed',
 }
