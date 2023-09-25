@@ -73,6 +73,6 @@ class DBStorage():
         Session = scoped_session(Var_Session)
         self.__session = Session()
 
-     def close(self):
+    def close(self):
         '''Implement method to close session'''
         self.__session.close()
